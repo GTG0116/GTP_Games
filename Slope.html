@@ -1,0 +1,25 @@
+<!-- Ultimate Game Stash file -->
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/mamayaya1/game@f3a882424a8f28d07bdf456b251d889725c4c1e4/projects/slope/">
+  <meta charset="utf-8">
+  <title>Slope</title>
+  <link href="shared/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="TemplateData56/style.css">
+  <script src="TemplateData56/UnityProgress.js"></script>
+  <script src="Build/UnityLoader.js"></script>
+  <script>
+    window.rWS = WebSocket;
+    var gameInstance = UnityLoader.instantiate("gameContainer", "Build/slope_27Sept.json", {
+      onProgress: UnityProgress,
+      Module: { onRuntimeInitialized: function() { UnityProgress(gameInstance, "complete"); } }
+    });
+  </script>
+</head>
+<body>
+  <div class="webgl-content">
+    <div id="gameContainer" style="width:100vw;height:100vh;"></div>
+  </div>
+</body>
+</html>

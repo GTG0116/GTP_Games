@@ -1,0 +1,29 @@
+<!-- Ultimate Game Stash file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/mamayaya1/game@f3a882424a8f28d07bdf456b251d889725c4c1e4/projects/geodash/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Geometry Dash</title>
+  <style>
+    html, body { height: 100%; margin: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    #wrapper { display: block; width: 100vw; height: 75vw; position: relative; }
+    @media (min-aspect-ratio: 480/360) { #wrapper { height: 100vh; width: 133.333vh; } }
+    #stage { width: 100%; height: 100%; }
+    #loading-progress { color: #0ff; position: fixed; bottom: 0; left: 0; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <canvas id="stage"></canvas>
+    <div id="monitors"></div>
+    <div id="asking-box">
+      <label id="question" for="answer">Question</label>
+      <input type="text" id="answer">
+    </div>
+  </div>
+  <span id="loading-progress">...</span>
+  <script type="text/javascript" src="./gdash.js"></script>
+</body>
+</html>
