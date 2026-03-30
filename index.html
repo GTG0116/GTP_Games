@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTP25</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0f1e;
+      --surface:   #0d1b3e;
+      --card:      #112253;
+      --card-hover:#163070;
+      --accent:    #1e6fff;
+      --accent2:   #3d8bff;
+      --text:      #e8f0ff;
+      --muted:     #7a9acc;
+      --border:    #1e3a6e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .logo span { color: #fff; }
+
+    #search {
+      flex: 1;
+      max-width: 400px;
+      height: 36px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #search:focus { border-color: var(--accent2); }
+    #search::placeholder { color: var(--muted); }
+
+    /* ── Main grid ── */
+    main {
+      padding: 28px 24px;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    #game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .game-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .game-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(30, 111, 255, 0.25);
+    }
+
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.18);
+      user-select: none;
+      background: var(--bg);
+      letter-spacing: -1px;
+    }
+
+    .card-body {
+      padding: 10px 12px 12px;
+    }
+
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 0.72rem;
+      color: var(--accent2);
+      background: rgba(30,111,255,0.12);
+      border-radius: 4px;
+      padding: 2px 7px;
+    }
+
+    .no-results {
+      display: none;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 40px;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* ── Game Modal ── */
+    #modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(5,10,25,0.95);
+      flex-direction: column;
+    }
+
+    #modal.open { display: flex; }
+
+    #modal-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      height: 50px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    #modal-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .modal-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 7px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .modal-btn:hover { background: var(--card-hover); border-color: var(--accent2); }
+
+    #modal-btn-fs {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    #modal-btn-fs:hover { background: var(--accent2); border-color: var(--accent2); }
+
+    #game-frame {
+      flex: 1;
+      border: none;
+      width: 100%;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">GTP<span>25</span></div>
+  <input id="search" type="text" placeholder="Search games..." autocomplete="off">
+</header>
+
+<main>
+  <div class="section-label">All Games</div>
+  <div id="game-grid">
+    <!-- cards injected by JS -->
+    <div class="no-results" id="no-results">No games match your search.</div>
+  </div>
+</main>
+
+<!-- Game overlay -->
+<div id="modal">
+  <div id="modal-bar">
+    <span id="modal-title">Game</span>
+    <button class="modal-btn" id="modal-btn-fs" onclick="toggleFullscreen()">Fullscreen</button>
+    <button class="modal-btn" id="modal-btn-close" onclick="closeGame()">Close</button>
+  </div>
+  <iframe id="game-frame" id="game-frame" allowfullscreen allow="fullscreen"></iframe>
+</div>
+
+<script>
+  const GAMES = [
+    { title: "2048",                  file: "2048.html",               tag: "Puzzle",   color: "#1e3a6e", abbr: "2048" },
+    { title: "8 Ball Pool",           file: "8BallPool.html",          tag: "Sports",   color: "#0d2b4a", abbr: "8BP"  },
+    { title: "99 Balls",              file: "99Balls.html",            tag: "Arcade",   color: "#112240", abbr: "99"   },
+    { title: "A Dance of Fire & Ice", file: "ADanceOfFireAndIce.html", tag: "Rhythm",   color: "#1a1040", abbr: "ADFI" },
+    { title: "Among Us",              file: "AmongUs.html",            tag: "Social",   color: "#0f1e40", abbr: "AU"   },
+    { title: "Angry Birds",           file: "AngryBirds.html",         tag: "Physics",  color: "#152a40", abbr: "AB"   },
+    { title: "Aquapark",              file: "Aquapark.html",           tag: "Casual",   color: "#0d2540", abbr: "AQ"   },
+    { title: "Retro Bowl",            file: "retrobowl.html",          tag: "Sports",   color: "#0f2b3a", abbr: "RB"   },
+  ];
+
+  const grid = document.getElementById("game-grid");
+  const noResults = document.getElementById("no-results");
+
+  function renderCards(list) {
+    // Remove existing cards (not the no-results div)
+    grid.querySelectorAll(".game-card").forEach(c => c.remove());
+    if (list.length === 0) {
+      noResults.style.display = "block";
+      return;
+    }
+    noResults.style.display = "none";
+    list.forEach(g => {
+      const card = document.createElement("div");
+      card.className = "game-card";
+      card.innerHTML = `
+        <div class="card-thumb" style="background:${g.color}">${g.abbr}</div>
+        <div class="card-body">
+          <div class="card-title">${g.title}</div>
+          <span class="card-tag">${g.tag}</span>
+        </div>
+      `;
+      card.addEventListener("click", () => openGame(g));
+      grid.insertBefore(card, noResults);
+    });
+  }
+
+  renderCards(GAMES);
+
+  document.getElementById("search").addEventListener("input", e => {
+    const q = e.target.value.trim().toLowerCase();
+    renderCards(q ? GAMES.filter(g => g.title.toLowerCase().includes(q) || g.tag.toLowerCase().includes(q)) : GAMES);
+  });
+
+  const modal = document.getElementById("modal");
+  const frame = document.getElementById("game-frame");
+  const modalTitle = document.getElementById("modal-title");
+
+  function openGame(g) {
+    modalTitle.textContent = g.title;
+    frame.src = g.file;
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGame() {
+    modal.classList.remove("open");
+    frame.src = "";
+    document.body.style.overflow = "";
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      (modal.requestFullscreen || modal.webkitRequestFullscreen || modal.mozRequestFullScreen).call(modal);
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
+    }
+  }
+
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("open")) closeGame(); });
+</script>
+
+</body>
+</html>
