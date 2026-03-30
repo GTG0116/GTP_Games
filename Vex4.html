@@ -1,0 +1,31 @@
+<!-- Ultimate Game Stash file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/mamayaya1/game@f3a882424a8f28d07bdf456b251d889725c4c1e4/projects/vex4/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+  <title>Vex 4</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <div id="content"></div>
+  <div id="orientation"></div>
+  <div id="loader">Loading ...</div>
+  <script src="assets/box2dweb/nape.min.js"></script>
+  <script src="assets/box2dweb/nape-debug-draw.min.js"></script>
+  <script src="assets/box2dweb/jquery-3.1.1.min.js"></script>
+  <script src="assets/box2dweb/easeljs-0.8.2.combined.js"></script>
+  <script src="assets/box2dweb/bluebird.min.js"></script>
+  <script>
+    var gameName = "vex-4.min.js";
+    function addScript(src, buster, cb) {
+      var s = document.createElement("script");
+      s.src = src + "?v=" + buster;
+      if (cb) s.onload = cb;
+      document.body.appendChild(s);
+    }
+    addScript("version.js", 1, function () { addScript(gameName, version, function () { new Vex4.Game(); }); });
+  </script>
+</body>
+</html>

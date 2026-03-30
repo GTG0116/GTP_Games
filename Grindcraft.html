@@ -1,0 +1,25 @@
+<!-- Ultimate Game Stash file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/mamayaya1/game@f3a882424a8f28d07bdf456b251d889725c4c1e4/projects/grindcraft/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+  <title>Grindcraft</title>
+  <style>body { overflow:hidden; margin:0; padding:0; }</style>
+</head>
+<body>
+  <div id="content"></div>
+  <div id="loader">Loading ...</div>
+  <script>
+    var gameName = "grindcraft.min.js";
+    function addScript(src, buster, cb) {
+      var s = document.createElement("script");
+      s.src = src + "?v=" + buster;
+      if (cb) s.onload = cb;
+      document.body.appendChild(s);
+    }
+    addScript("version.js", Date.now(), function () { addScript(gameName, version, function () {}); });
+  </script>
+</body>
+</html>

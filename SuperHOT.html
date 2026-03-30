@@ -1,0 +1,25 @@
+<!-- Ultimate Game Stash file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/mamayaya1/game@f3a882424a8f28d07bdf456b251d889725c4c1e4/projects/superhot/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUPERHOT</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="margin:0;">
+  <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" style="width:100%;height:100vh;display:block;"></canvas>
+  <script>
+    var Module = {
+      TOTAL_MEMORY: 268435456,
+      errorhandler: null,
+      compatibilitycheck: null,
+      dataUrl: "webgl.datagz",
+      codeUrl: "webgl.jsgz",
+      memUrl: "webgl.memgz"
+    };
+  </script>
+  <script src="UnityLoader.js"></script>
+</body>
+</html>
