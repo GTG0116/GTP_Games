@@ -19,62 +19,68 @@
       --border:    #1e3a6e;
     }
 
+    html, body {
+      height: 100%;
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ── Header ── */
+    /* ─── Shared header ─────────────────────────────── */
     header {
       background: var(--surface);
       border-bottom: 2px solid var(--border);
-      padding: 0 24px;
-      height: 60px;
+      padding: 0 20px;
+      height: 56px;
       display: flex;
       align-items: center;
-      gap: 20px;
-      position: sticky;
-      top: 0;
+      gap: 14px;
+      flex-shrink: 0;
       z-index: 10;
     }
 
     .logo {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--accent2);
       letter-spacing: 1px;
       white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
     }
-
     .logo span { color: #fff; }
 
     #search {
       flex: 1;
-      max-width: 400px;
-      height: 36px;
+      max-width: 380px;
+      height: 34px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0 14px;
+      padding: 0 12px;
       color: var(--text);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       outline: none;
       transition: border-color 0.2s;
     }
-
     #search:focus { border-color: var(--accent2); }
     #search::placeholder { color: var(--muted); }
 
-    /* ── Main grid ── */
-    main {
-      padding: 28px 24px;
+    /* ─── Home view ──────────────────────────────────── */
+    #home-view {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 20px;
     }
 
     .section-label {
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: var(--muted);
@@ -83,24 +89,24 @@
 
     #game-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
     }
 
     .game-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.15s, background 0.15s, border-color 0.15s, box-shadow 0.15s;
+      user-select: none;
     }
-
     .game-card:hover {
       background: var(--card-hover);
       border-color: var(--accent);
       transform: translateY(-3px);
-      box-shadow: 0 6px 24px rgba(30, 111, 255, 0.25);
+      box-shadow: 0 6px 22px rgba(30,111,255,0.22);
     }
 
     .card-thumb {
@@ -109,22 +115,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.4rem;
+      font-size: 1.9rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.18);
-      user-select: none;
-      background: var(--bg);
+      color: rgba(255,255,255,0.15);
       letter-spacing: -1px;
     }
 
     .card-body {
-      padding: 10px 12px 12px;
+      padding: 8px 10px 10px;
     }
 
     .card-title {
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 600;
-      color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -132,178 +135,392 @@
 
     .card-tag {
       display: inline-block;
-      margin-top: 5px;
-      font-size: 0.72rem;
+      margin-top: 4px;
+      font-size: 0.7rem;
       color: var(--accent2);
       background: rgba(30,111,255,0.12);
       border-radius: 4px;
-      padding: 2px 7px;
+      padding: 2px 6px;
     }
 
-    .no-results {
+    #no-results {
       display: none;
       color: var(--muted);
-      font-size: 1rem;
-      margin-top: 40px;
+      font-size: 0.95rem;
       text-align: center;
       width: 100%;
+      padding: 40px 0;
     }
 
-    /* ── Game Modal ── */
-    #modal {
+    /* ─── Game view ──────────────────────────────────── */
+    #game-view {
       display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(5,10,25,0.95);
+      flex: 1;
       flex-direction: column;
+      min-height: 0;
     }
 
-    #modal.open { display: flex; }
-
-    #modal-bar {
+    #game-bar {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       padding: 0 16px;
-      height: 50px;
+      height: 44px;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
 
-    #modal-title {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .modal-btn {
+    #back-btn {
       background: var(--card);
       border: 1px solid var(--border);
       color: var(--text);
       border-radius: 7px;
-      padding: 6px 14px;
-      font-size: 0.85rem;
+      padding: 5px 12px;
+      font-size: 0.82rem;
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
       white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #back-btn:hover { background: var(--card-hover); border-color: var(--accent2); }
+
+    #game-title-bar {
+      flex: 1;
+      font-weight: 700;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .modal-btn:hover { background: var(--card-hover); border-color: var(--accent2); }
+    /* ─── Game + sidebar layout ──────────────────────── */
+    #game-content {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
 
-    #modal-btn-fs {
+    /* Left: iframe column */
+    #game-main {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    #game-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    #game-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    #fs-btn {
       background: var(--accent);
-      border-color: var(--accent);
+      border: none;
+      color: #fff;
+      border-radius: 7px;
+      padding: 5px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
     }
+    #fs-btn:hover { background: var(--accent2); }
 
-    #modal-btn-fs:hover { background: var(--accent2); border-color: var(--accent2); }
+    #frame-wrap {
+      flex: 1;
+      position: relative;
+      background: #000;
+      min-height: 0;
+    }
 
     #game-frame {
-      flex: 1;
-      border: none;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      background: #000;
+      height: 100%;
+      border: none;
     }
+
+    /* Right: recommendations sidebar */
+    #game-sidebar {
+      width: 230px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 12px 10px;
+      gap: 8px;
+    }
+
+    #sidebar-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted);
+      flex-shrink: 0;
+      padding-bottom: 2px;
+    }
+
+    .rec-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .rec-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .rec-thumb {
+      width: 68px;
+      height: 48px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.18);
+    }
+
+    .rec-info {
+      flex: 1;
+      min-width: 0;
+      padding-right: 6px;
+    }
+
+    .rec-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rec-tag {
+      font-size: 0.68rem;
+      color: var(--accent2);
+      margin-top: 2px;
+    }
+
+    /* ─── Responsive ─────────────────────────────────── */
+    @media (max-width: 680px) {
+      #game-content { flex-direction: column; }
+      #game-sidebar {
+        width: 100%;
+        height: 180px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding: 8px;
+      }
+      .rec-card { flex-direction: column; width: 100px; flex-shrink: 0; align-items: flex-start; }
+      .rec-thumb { width: 100%; height: 56px; }
+      .rec-info { padding: 4px 6px 6px; }
+    }
+
+    /* Active view helpers */
+    body.in-game #home-view { display: none; }
+    body.in-game #game-view { display: flex; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">GTP<span>25</span></div>
+  <div class="logo" id="logo-btn">GTP<span>25</span></div>
   <input id="search" type="text" placeholder="Search games..." autocomplete="off">
 </header>
 
-<main>
+<!-- ── Home view ── -->
+<div id="home-view">
   <div class="section-label">All Games</div>
   <div id="game-grid">
-    <!-- cards injected by JS -->
-    <div class="no-results" id="no-results">No games match your search.</div>
+    <div id="no-results">No games match your search.</div>
   </div>
-</main>
+</div>
 
-<!-- Game overlay -->
-<div id="modal">
-  <div id="modal-bar">
-    <span id="modal-title">Game</span>
-    <button class="modal-btn" id="modal-btn-fs" onclick="toggleFullscreen()">Fullscreen</button>
-    <button class="modal-btn" id="modal-btn-close" onclick="closeGame()">Close</button>
+<!-- ── Game view ── -->
+<div id="game-view">
+  <div id="game-bar">
+    <button id="back-btn" onclick="goHome()">&#8592; Back</button>
+    <div id="game-title-bar">Game</div>
   </div>
-  <iframe id="game-frame" id="game-frame" allowfullscreen allow="fullscreen"></iframe>
+  <div id="game-content">
+    <!-- Iframe column -->
+    <div id="game-main">
+      <div id="game-controls">
+        <span id="game-label">Playing now</span>
+        <button id="fs-btn" onclick="toggleFullscreen()">Fullscreen</button>
+      </div>
+      <div id="frame-wrap">
+        <iframe id="game-frame" allowfullscreen allow="fullscreen *"></iframe>
+      </div>
+    </div>
+    <!-- Recommendations sidebar -->
+    <div id="game-sidebar">
+      <div id="sidebar-label">Up Next</div>
+      <!-- rec cards injected by JS -->
+    </div>
+  </div>
 </div>
 
 <script>
+  const CDN = "https://cdn.jsdelivr.net/gh/mamayaya1/game@f3a882424a8f28d07bdf456b251d889725c4c1e4/projects/";
+
   const GAMES = [
-    { title: "2048",                  file: "2048.html",               tag: "Puzzle",   color: "#1e3a6e", abbr: "2048" },
-    { title: "8 Ball Pool",           file: "8BallPool.html",          tag: "Sports",   color: "#0d2b4a", abbr: "8BP"  },
-    { title: "99 Balls",              file: "99Balls.html",            tag: "Arcade",   color: "#112240", abbr: "99"   },
-    { title: "A Dance of Fire & Ice", file: "ADanceOfFireAndIce.html", tag: "Rhythm",   color: "#1a1040", abbr: "ADFI" },
-    { title: "Among Us",              file: "AmongUs.html",            tag: "Social",   color: "#0f1e40", abbr: "AU"   },
-    { title: "Angry Birds",           file: "AngryBirds.html",         tag: "Physics",  color: "#152a40", abbr: "AB"   },
-    { title: "Aquapark",              file: "Aquapark.html",           tag: "Casual",   color: "#0d2540", abbr: "AQ"   },
-    { title: "Retro Bowl",            file: "retrobowl.html",          tag: "Sports",   color: "#0f2b3a", abbr: "RB"   },
+    { id:"2048",         title:"2048",                  file:"2048.html",               tag:"Puzzle",  color:"#0d2a5e", abbr:"2048" },
+    { id:"8ball",        title:"8 Ball Pool",            file:"8BallPool.html",          tag:"Sports",  color:"#0a2240", abbr:"8BP"  },
+    { id:"99balls",      title:"99 Balls",               file:"99Balls.html",            tag:"Arcade",  color:"#0d1f45", abbr:"99"   },
+    { id:"adofai",       title:"A Dance of Fire & Ice",  file:"ADanceOfFireAndIce.html", tag:"Rhythm",  color:"#160f45", abbr:"ADFI" },
+    { id:"amongus",      title:"Among Us",               file:"AmongUs.html",            tag:"Social",  color:"#0a1b45", abbr:"AU"   },
+    { id:"angrybirds",   title:"Angry Birds",            file:"AngryBirds.html",         tag:"Physics", color:"#0f2440", abbr:"AB"   },
+    { id:"aquapark",     title:"Aquapark",               file:"Aquapark.html",           tag:"Casual",  color:"#0a2040", abbr:"AQ"   },
+    { id:"retrobowl",    title:"Retro Bowl",             file:"retrobowl.html",          tag:"Sports",  color:"#0d2a40", abbr:"RB"   },
+    { id:"flappybird",   title:"Flappy Bird",            file:"FlappyBird.html",         tag:"Arcade",  color:"#0a2e50", abbr:"FB"   },
+    { id:"doodlejump",   title:"Doodle Jump",            file:"DoodleJump.html",         tag:"Arcade",  color:"#0a2845", abbr:"DJ"   },
+    { id:"drifthunters", title:"Drift Hunters",          file:"DriftHunters.html",       tag:"Racing",  color:"#0e1a3a", abbr:"DH"   },
+    { id:"bballstars",   title:"Basketball Stars",       file:"BasketballStars.html",    tag:"Sports",  color:"#0b2240", abbr:"BBS"  },
+    { id:"crossyroad",   title:"Crossy Road",            file:"CrossyRoad.html",         tag:"Arcade",  color:"#0c2545", abbr:"CR"   },
+    { id:"idlebreakout", title:"Idle Breakout",          file:"IdleBreakout.html",       tag:"Idle",    color:"#080f2a", abbr:"IB"   },
+    { id:"slope",        title:"Slope",                  file:"Slope.html",              tag:"Racing",  color:"#050e22", abbr:"SLP"  },
+    { id:"geodash",      title:"Geometry Dash",          file:"GeometryDash.html",       tag:"Rhythm",  color:"#1a0f45", abbr:"GD"   },
+    { id:"tunnelrush",   title:"Tunnel Rush",            file:"TunnelRush.html",         tag:"Arcade",  color:"#0c2040", abbr:"TR"   },
+    { id:"rooftopsni",   title:"Rooftop Snipers",        file:"RooftopSnipers.html",     tag:"Action",  color:"#0a1830", abbr:"RS"   },
+    { id:"motox3m",      title:"Moto X3M",               file:"MotoX3M.html",            tag:"Racing",  color:"#0e2040", abbr:"X3M"  },
+    { id:"msc2",         title:"Madalin Stunt Cars 2",   file:"MadalinStuntCars2.html",  tag:"Racing",  color:"#0b1a38", abbr:"MSC"  },
+    { id:"whg",          title:"World's Hardest Game",   file:"WorldsHardestGame.html",  tag:"Puzzle",  color:"#0a1830", abbr:"WHG"  },
+    { id:"getaway",      title:"Getaway Shootout",       file:"GetawayShootout.html",    tag:"Action",  color:"#0c1f3a", abbr:"GS"   },
+    { id:"bloonstd",     title:"Bloons Tower Defense",   file:"BloonsTD.html",           tag:"Strategy",color:"#0a2035", abbr:"BTD"  },
+    { id:"cuttherope",   title:"Cut the Rope",           file:"CutTheRope.html",         tag:"Puzzle",  color:"#0d2245", abbr:"CTR"  },
   ];
 
+  /* ── Render home grid ─────────────────────────────── */
   const grid = document.getElementById("game-grid");
   const noResults = document.getElementById("no-results");
 
-  function renderCards(list) {
-    // Remove existing cards (not the no-results div)
-    grid.querySelectorAll(".game-card").forEach(c => c.remove());
-    if (list.length === 0) {
-      noResults.style.display = "block";
-      return;
-    }
-    noResults.style.display = "none";
-    list.forEach(g => {
-      const card = document.createElement("div");
-      card.className = "game-card";
-      card.innerHTML = `
+  function makeCard(g, small = false) {
+    const el = document.createElement("div");
+    el.className = small ? "rec-card" : "game-card";
+    if (small) {
+      el.innerHTML = `
+        <div class="rec-thumb" style="background:${g.color}">${g.abbr}</div>
+        <div class="rec-info">
+          <div class="rec-title">${g.title}</div>
+          <div class="rec-tag">${g.tag}</div>
+        </div>`;
+    } else {
+      el.innerHTML = `
         <div class="card-thumb" style="background:${g.color}">${g.abbr}</div>
         <div class="card-body">
           <div class="card-title">${g.title}</div>
           <span class="card-tag">${g.tag}</span>
-        </div>
-      `;
-      card.addEventListener("click", () => openGame(g));
-      grid.insertBefore(card, noResults);
-    });
+        </div>`;
+    }
+    el.addEventListener("click", () => openGame(g));
+    return el;
   }
 
-  renderCards(GAMES);
+  function renderGrid(list) {
+    grid.querySelectorAll(".game-card").forEach(c => c.remove());
+    noResults.style.display = list.length ? "none" : "block";
+    list.forEach(g => grid.insertBefore(makeCard(g), noResults));
+  }
+
+  renderGrid(GAMES);
 
   document.getElementById("search").addEventListener("input", e => {
     const q = e.target.value.trim().toLowerCase();
-    renderCards(q ? GAMES.filter(g => g.title.toLowerCase().includes(q) || g.tag.toLowerCase().includes(q)) : GAMES);
+    renderGrid(q ? GAMES.filter(g =>
+      g.title.toLowerCase().includes(q) || g.tag.toLowerCase().includes(q)
+    ) : GAMES);
   });
 
-  const modal = document.getElementById("modal");
-  const frame = document.getElementById("game-frame");
-  const modalTitle = document.getElementById("modal-title");
+  /* ── Recommendations ──────────────────────────────── */
+  function getRecommendations(current, count = 5) {
+    const sameTag = GAMES.filter(g => g.id !== current.id && g.tag === current.tag);
+    const others  = GAMES.filter(g => g.id !== current.id && g.tag !== current.tag);
+    // shuffle helpers
+    const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+    const pool = [...shuffle(sameTag), ...shuffle(others)];
+    return pool.slice(0, count);
+  }
+
+  /* ── Open / close game ────────────────────────────── */
+  const gameView    = document.getElementById("game-view");
+  const gameFrame   = document.getElementById("game-frame");
+  const gameTitleBar = document.getElementById("game-title-bar");
+  const gameLabel   = document.getElementById("game-label");
+  const sidebar     = document.getElementById("game-sidebar");
+  const sideLabel   = document.getElementById("sidebar-label");
+
+  let currentGame = null;
 
   function openGame(g) {
-    modalTitle.textContent = g.title;
-    frame.src = g.file;
-    modal.classList.add("open");
-    document.body.style.overflow = "hidden";
+    currentGame = g;
+    gameTitleBar.textContent = g.title;
+    gameLabel.textContent = "Now playing: " + g.title;
+    gameFrame.src = g.file;
+    document.body.classList.add("in-game");
+
+    // Build recommendations
+    sidebar.querySelectorAll(".rec-card").forEach(c => c.remove());
+    getRecommendations(g).forEach(rec => sidebar.appendChild(makeCard(rec, true)));
   }
 
-  function closeGame() {
-    modal.classList.remove("open");
-    frame.src = "";
-    document.body.style.overflow = "";
+  function goHome() {
+    document.body.classList.remove("in-game");
+    gameFrame.src = "";
+    currentGame = null;
+    // exit fullscreen if active
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   }
 
+  /* ── Fullscreen ───────────────────────────────────── */
   function toggleFullscreen() {
+    const wrap = document.getElementById("frame-wrap");
     if (!document.fullscreenElement) {
-      (modal.requestFullscreen || modal.webkitRequestFullscreen || modal.mozRequestFullScreen).call(modal);
+      (wrap.requestFullscreen || wrap.webkitRequestFullscreen || wrap.mozRequestFullScreen).call(wrap);
     } else {
       (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
     }
   }
 
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("open")) closeGame(); });
+  /* ── Logo click → home ───────────────────────────── */
+  document.getElementById("logo-btn").addEventListener("click", () => {
+    if (document.body.classList.contains("in-game")) goHome();
+  });
+
+  /* ── Keyboard shortcut ───────────────────────────── */
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && currentGame) goHome();
+  });
 </script>
 
 </body>
